@@ -1,0 +1,91 @@
+[
+  {
+    "timestamp": "2026-01-09T17:47:30.350857",
+    "career_path": "Deep Learning Engineer",
+    "confidence": 42.64,
+    "student_info": {
+      "age": "20",
+      "qualification": "B.Tech",
+      "grade": "66",
+      "interest": "AI/ML"
+    }
+  },
+  {
+    "timestamp": "2026-01-09T17:48:13.600979",
+    "career_path": "Software Engineer",
+    "confidence": 20.21,
+    "student_info": {
+      "age": "20",
+      "qualification": "B.Tech",
+      "grade": "88",
+      "interest": "Software Developmt"
+    }
+  },
+  {
+    "timestamp": "2026-01-09T17:49:17.614219",
+    "career_path": "Business Analyst",
+    "confidence": 24.14,
+    "student_info": {
+      "age": "20",
+      "qualification": "BCA",
+      "grade": "99",
+      "interest": "Data Science"
+    }
+  },
+  {
+    "timestamp": "2026-01-09T21:53:41.417983",
+    "career_path": "Data Analyst",
+    "confidence": 26.67,
+    "student_info": {
+      "age": "20",
+      "qualification": "BCA",
+      "grade": "77",
+      "interest": "Data Science"
+    }
+  },
+  {
+    "timestamp": "2026-02-18T08:57:11.881989",
+    "career_path": "Data Scientist",
+    "confidence": 24.32,
+    "student_info": {
+      "age": "20",
+      "qualification": "B.Tech",
+      "grade": "44",
+      "interest": "Data Science"
+    }
+  },
+  {
+    "timestamp": "2026-02-18T09:39:57.296457",
+    "career_path": "Business Analyst",
+    "confidence": 25.48,
+    "student_info": {
+      "age": "21",
+      "qualification": "B.Tech",
+      "grade": "55",
+      "interest": "Data Science"
+    }
+  },
+  {
+    "timestamp": "2026-02-18T14:41:10.883204",
+    "career_path": "Business Analyst",
+    "confidence": 24.62,
+    "student_info": {
+      "age": "21",
+      "qualification": "B.Tech",
+      "grade": "77",
+      "interest": "Data Science"
+    }
+  },
+  {
+    "timestamp": "2026-02-23T11:10:15.705469",
+    "career_path": "Data Scientist",
+    "confidence": 25.18,
+    "student_info": {
+      "age": "21",
+      "qualification": "MCA",
+      "grade": "7.5",
+      "interest": "Data Science"
+    }
+  },
+  
+]
