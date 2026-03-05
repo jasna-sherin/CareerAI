@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prediction History — CareerAI</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="page-wrapper">
+  <div class="container--wide">
+
+    <nav class="top-nav">
+      <a href="/" class="nav-brand">🎓 CareerAI</a>
+      <div class="nav-links">
+        <a href="/" class="nav-link">Predict</a>
+        <a href="/statistics" class="nav-link">📈 Stats</a>
+        <a href="/history" class="nav-link active">📜 History</a>
+        <a href="/feedback" class="nav-link">💬 Feedback</a>
+      </div>
+    </nav>
+
+    <div class="page-header animate-fade-up">
+      <span class="eyebrow">Past Sessions</span>
+      <h1>Prediction History</h1>
+      <p>All career predictions from this system, newest first.</p>
+    </div>
+
+    {% if not history %}
+    <div class="card animate-fade-up delay-1">
+      <div class="empty-state">
+        <div class="icon">📜</div>
+        <h3>No history yet</h3>
+        <p>Career predictions will appear here once you use the recommendation form.</p>
+        <a href="/" class="btn btn--primary" style="margin-top:16px">Make a Prediction →</a>
+      </div>
+    </div>
+    {% else %}
+    <div class="card card--flush animate-fade-up delay-1">
+      <div style="overflow-x:auto">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Date & Time</th>
+              <th>Predicted Career</th>
+              <th>Confidence</th>
+              <th>Age</th>
+              <th>Qualification</th>
+              <th>Grade</th>
+              <th>Interest</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for entry in history %}
+            <tr>
+              <td style="color:var(--muted); font-size:.85rem">{{ loop.index }}</td>
+              <td style="color:var(--muted); font-size:.85rem; white-space:nowrap">{{ entry.timestamp[:19] | replace('T', ' ') }}</td>
+              <td>
+                <a href="/career-guide/{{ entry.career_path }}" style="font-weight:600; color:var(--accent); text-decoration:none">
+                  {{ entry.career_path }}
+                </a>
+              </td>
+              <td>
+                <span class="badge {% if entry.confidence >= 40 %}badge--success{% elif entry.confidence >= 25 %}badge--warning{% else %}badge--danger{% endif %}">
+                  {{ entry.confidence }}%
+                </span>
+              </td>
+              <td>{{ entry.student_info.age }}</td>
+              <td>{{ entry.student_info.qualification }}</td>
+              <td>{{ entry.student_info.grade }}%</td>
+              <td>
+                <span class="badge badge--primary" style="font-size:.75rem">{{ entry.student_info.interest }}</span>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="btn-group btn-group--center animate-fade-up" style="margin-top:20px">
+      <a href="/" class="btn btn--primary">🏠 Home</a>
+      <a href="/statistics" class="btn btn--outline">📈 Statistics</a>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

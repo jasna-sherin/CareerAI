@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skills Gap Analysis — CareerAI</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="page-wrapper">
+  <div class="container">
+
+    <nav class="top-nav">
+      <a href="/" class="nav-brand">🎓 CareerAI</a>
+      <div class="nav-links">
+        <a href="/" class="nav-link">Predict</a>
+        <a href="/statistics" class="nav-link">📈 Stats</a>
+        <a href="/history" class="nav-link">📜 History</a>
+      </div>
+    </nav>
+
+    <div class="page-header animate-fade-up">
+      <span class="eyebrow">Skills Analysis</span>
+      <h1>Skills Gap Analysis</h1>
+      <p>See what you already have and what to learn next.</p>
+    </div>
+
+    <!-- Career Header -->
+    <div class="result-hero animate-fade-up delay-1">
+      <div class="career-label">🎯 Target Role</div>
+      <h2>{{ analysis.career_icon or '🎯' }} {{ analysis.desired_career }}</h2>
+      <p class="confidence-text">Skills Match: <strong>{{ analysis.match_percentage }}%</strong></p>
+      <div class="confidence-track">
+        <div class="confidence-fill" id="matchBar" style="width:0%"></div>
+      </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="stat-row animate-fade-up delay-2">
+      <div class="stat-card stat-card--success">
+        <div class="stat-val">{{ analysis.matching_skills | length }}</div>
+        <div class="stat-lbl">✅ Skills You Have</div>
+      </div>
+      <div class="stat-card" style="border-left: 3px solid var(--danger)">
+        <div class="stat-val" style="color:var(--danger)">{{ analysis.missing_skills | length }}</div>
+        <div class="stat-lbl">📚 Skills to Learn</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">{{ analysis.required_skills | length }}</div>
+        <div class="stat-lbl">🎯 Total Required</div>
+      </div>
+    </div>
+
+    <!-- Skills You Have -->
+    <div class="card animate-fade-up delay-2" style="margin-top:0">
+      <div class="info-title">✅ Skills You Already Have</div>
+      {% if analysis.matching_skills %}
+      <div class="skill-grid">
+        {% for skill in analysis.matching_skills %}
+        <span class="skill-tag skill-tag--have">✓ {{ skill }}</span>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="alert alert--warning">
+        <span>⚠️</span>
+        <div>No matching skills found yet. Start building your foundation with the skills listed below.</div>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Skills to Learn -->
+    <div class="card animate-fade-up delay-3" style="margin-top:16px">
+      <div class="info-title">📚 Skills You Need to Develop</div>
+      {% if analysis.missing_skills %}
+      <div class="skill-grid" style="margin-bottom:20px">
+        {% for skill in analysis.missing_skills %}
+        <span class="skill-tag skill-tag--need">+ {{ skill }}</span>
+        {% endfor %}
+      </div>
+      <hr class="divider">
+      <div class="info-title" style="margin-bottom:12px">💡 Learning Roadmap</div>
+      <div style="display:flex; flex-direction:column; gap:10px; font-size:.9rem; color:var(--text-mid); line-height:1.7">
+        <div class="alert alert--info" style="margin-bottom:0">
+          <span>🎓</span>
+          <div><strong>Start with fundamentals:</strong> Focus on the core missing skills above, one at a time.</div>
+        </div>
+        <div class="alert alert--info" style="margin-bottom:0">
+          <span>💻</span>
+          <div><strong>Online platforms:</strong> Coursera, Udemy, edX, and Pluralsight have excellent {{ analysis.desired_career }} courses.</div>
+        </div>
+        <div class="alert alert--info" style="margin-bottom:0">
+          <span>🛠</span>
+          <div><strong>Build projects:</strong> Apply each new skill through real projects to cement understanding.</div>
+        </div>
+        <div class="alert alert--info" style="margin-bottom:0">
+          <span>🏅</span>
+          <div><strong>Get certified:</strong> Industry certifications add credibility to your skillset.</div>
+        </div>
+        <div class="alert alert--success" style="margin-bottom:0">
+          <span>⏱</span>
+          <div><strong>Estimated timeline:</strong> With consistent effort, you can bridge this gap in <strong>3–6 months</strong>.</div>
+        </div>
+      </div>
+      {% else %}
+      <div class="alert alert--success">
+        <span>🎉</span>
+        <div><strong>Congratulations!</strong> You already have all the required skills for this career path. You're ready to apply!</div>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Your Current Skills -->
+    {% if analysis.your_skills %}
+    <div class="card animate-fade-up delay-4" style="margin-top:16px">
+      <div class="info-title">🧰 Your Current Skill Set</div>
+      <div class="skill-grid">
+        {% for skill in analysis.your_skills %}
+        <span class="skill-tag skill-tag--yours">{{ skill }}</span>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="btn-group btn-group--center animate-fade-up" style="margin-top:24px">
+      <a href="/" class="btn btn--primary">🏠 Home</a>
+      <a href="/career-guide/{{ analysis.desired_career }}" class="btn btn--outline">📖 Career Guide</a>
+      <a href="javascript:history.back()" class="btn btn--ghost">← Back</a>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  window.addEventListener('load', () => {
+    const bar = document.getElementById('matchBar');
+    setTimeout(() => { bar.style.width = '{{ analysis.match_percentage }}%'; }, 200);
+  });
+</script>
+</body>
+</html>

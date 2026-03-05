@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Statistics — CareerAI</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="page-wrapper">
+  <div class="container--wide">
+
+    <nav class="top-nav">
+      <a href="/" class="nav-brand">🎓 CareerAI</a>
+      <div class="nav-links">
+        <a href="/" class="nav-link">Predict</a>
+        <a href="/compare" class="nav-link">⚖️ Compare</a>
+        <a href="/statistics" class="nav-link active">📈 Stats</a>
+        <a href="/history" class="nav-link">📜 History</a>
+        <a href="/feedback" class="nav-link">💬 Feedback</a>
+      </div>
+    </nav>
+
+    <div class="page-header animate-fade-up">
+      <span class="eyebrow">Analytics Dashboard</span>
+      <h1>System Statistics</h1>
+      <p>Insights from all prediction sessions.</p>
+    </div>
+
+    <!-- Key Metrics -->
+    <div class="stat-row animate-fade-up delay-1">
+      <div class="stat-card stat-card--accent">
+        <div class="stat-val">{{ stats.total_predictions }}</div>
+        <div class="stat-lbl">Total Predictions</div>
+      </div>
+      <div class="stat-card stat-card--success">
+        <div class="stat-val">{{ stats.avg_confidence }}%</div>
+        <div class="stat-lbl">Avg Confidence</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">{{ stats.career_distribution | length }}</div>
+        <div class="stat-lbl">Career Paths Seen</div>
+      </div>
+    </div>
+
+    {% if stats.total_predictions == 0 %}
+    <div class="card animate-fade-up delay-2">
+      <div class="empty-state">
+        <div class="icon">📊</div>
+        <h3>No predictions yet</h3>
+        <p>Use the prediction form to generate career recommendations. Statistics will appear here.</p>
+        <a href="/" class="btn btn--primary" style="margin-top:16px">Get Started →</a>
+      </div>
+    </div>
+    {% else %}
+
+    <!-- Career Distribution Chart -->
+    <div class="card animate-fade-up delay-2" style="margin-top:0">
+      <div class="info-title">📊 Career Path Distribution</div>
+      <div style="margin-top:16px">
+        {% for career, count in stats.career_distribution.items() %}
+        <div class="chart-item">
+          <div class="chart-label" title="{{ career }}">{{ career }}</div>
+          <div class="chart-bar-wrap">
+            <div class="chart-bar" data-width="{{ (count / stats.total_predictions * 100) | round(1) }}">
+              {{ count }}
+            </div>
+          </div>
+          <div class="chart-count">{{ count }}</div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Recent Predictions -->
+    <div class="card card--flush animate-fade-up delay-3">
+      <div style="padding:20px 24px 12px; border-bottom:1px solid var(--border)">
+        <div class="info-title" style="margin-bottom:0">🕐 Recent Predictions</div>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Date & Time</th>
+              <th>Qualification</th>
+              <th>Grade</th>
+              <th>Interest</th>
+              <th>Predicted Career</th>
+              <th>Confidence</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for entry in stats.recent_predictions %}
+            <tr>
+              <td style="color:var(--muted); font-size:.85rem; white-space:nowrap">{{ entry.timestamp[:19] | replace('T', ' ') }}</td>
+              <td>{{ entry.student_info.qualification }}</td>
+              <td>{{ entry.student_info.grade }}%</td>
+              <td>
+                <span class="badge badge--primary">{{ entry.student_info.interest }}</span>
+              </td>
+              <td><strong>{{ entry.career_path }}</strong></td>
+              <td>
+                <span class="badge {% if entry.confidence >= 40 %}badge--success{% elif entry.confidence >= 25 %}badge--warning{% else %}badge--danger{% endif %}">
+                  {{ entry.confidence }}%
+                </span>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="btn-group btn-group--center animate-fade-up" style="margin-top:20px">
+      <a href="/" class="btn btn--primary">🏠 Home</a>
+      <a href="/history" class="btn btn--outline">📜 Full History</a>
+      <a href="/feedback" class="btn btn--ghost">💬 Give Feedback</a>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  window.addEventListener('load', () => {
+    document.querySelectorAll('.chart-bar').forEach(bar => {
+      const w = bar.dataset.width;
+      bar.style.width = '0%';
+      setTimeout(() => { bar.style.width = w + '%'; }, 200);
+    });
+  });
+</script>
+</body>
+</html>

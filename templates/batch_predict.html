@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Batch Prediction — CareerAI</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="page-wrapper">
+  <div class="container--narrow">
+
+    <nav class="top-nav">
+      <a href="/" class="nav-brand">🎓 CareerAI</a>
+      <div class="nav-links">
+        <a href="/" class="nav-link">Predict</a>
+        <a href="/compare" class="nav-link">⚖️ Compare</a>
+        <a href="/batch-predict" class="nav-link active">📊 Batch</a>
+        <a href="/statistics" class="nav-link">📈 Stats</a>
+      </div>
+    </nav>
+
+    <div class="page-header animate-fade-up">
+      <span class="eyebrow">Bulk Processing</span>
+      <h1>Batch Prediction</h1>
+      <p>Upload a CSV file to generate career recommendations for multiple students at once.</p>
+    </div>
+
+    <div class="card animate-fade-up delay-1">
+      <form action="/batch-predict" method="POST" enctype="multipart/form-data" id="uploadForm">
+        <div class="upload-zone" id="uploadZone">
+          <div class="upload-icon">📂</div>
+          <div class="upload-title">Click to browse or drag & drop a CSV</div>
+          <div class="upload-hint">Maximum 1,000 rows · 10 MB limit</div>
+          <input type="file" name="file" id="fileInput" accept=".csv" required style="display:none">
+        </div>
+
+        <div class="file-info-box" id="fileInfo">
+          <span style="font-size:1.5rem">📄</span>
+          <div>
+            <div style="font-weight:600" id="fileName"></div>
+            <div style="font-size:.8rem; color:var(--muted)" id="fileSize"></div>
+          </div>
+          <button type="button" onclick="clearFile()" class="btn btn--ghost btn--sm" style="margin-left:auto">✕ Remove</button>
+        </div>
+
+        <button type="submit" class="btn btn--accent btn--lg btn--full" id="submitBtn" disabled style="margin-top:16px">
+          🚀 Process Batch Prediction
+        </button>
+      </form>
+    </div>
+
+    <!-- Instructions -->
+    <div class="card animate-fade-up delay-2" style="margin-top:16px">
+      <div class="info-title">📋 CSV Format Requirements</div>
+      <div class="alert alert--info" style="margin-bottom:0">
+        <span>ℹ️</span>
+        <div>
+          <strong>Required columns:</strong> age, gender, location, qualification, stream, academic_level, grade, interest, work_style, work_type, relocate<br>
+          <strong>Optional:</strong> name, technical_skills, soft_skills, languages, certifications, experience
+        </div>
+      </div>
+      <div style="margin-top:16px; font-size:.875rem; color:var(--text-mid); line-height:1.8">
+        • Include a header row with exact column names (case-insensitive)<br>
+        • Use comma (,) as the delimiter<br>
+        • A <strong>name</strong> column is optional but recommended for the results table
+      </div>
+      <div style="margin-top:16px">
+        <button onclick="downloadSample()" class="btn btn--outline btn--sm">⬇️ Download Sample CSV</button>
+      </div>
+    </div>
+
+    <div class="btn-group btn-group--center" style="margin-top:20px">
+      <a href="/" class="btn btn--ghost">← Back to Home</a>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const zone = document.getElementById('uploadZone');
+  const input = document.getElementById('fileInput');
+  const infoBox = document.getElementById('fileInfo');
+  const nameEl = document.getElementById('fileName');
+  const sizeEl = document.getElementById('fileSize');
+  const btn = document.getElementById('submitBtn');
+
+  zone.addEventListener('click', () => input.click());
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragover'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+  zone.addEventListener('drop', e => {
+    e.preventDefault();
+    zone.classList.remove('dragover');
+    if (e.dataTransfer.files[0]) {
+      input.files = e.dataTransfer.files;
+      handleFile(e.dataTransfer.files[0]);
+    }
+  });
+  input.addEventListener('change', () => { if (input.files[0]) handleFile(input.files[0]); });
+
+  function handleFile(file) {
+    if (!file.name.toLowerCase().endsWith('.csv')) {
+      alert('Please upload a CSV file.');
+      return;
+    }
+    nameEl.textContent = file.name;
+    sizeEl.textContent = formatSize(file.size);
+    infoBox.classList.add('active');
+    btn.disabled = false;
+  }
+
+  function clearFile() {
+    input.value = '';
+    infoBox.classList.remove('active');
+    btn.disabled = true;
+  }
+
+  function formatSize(b) {
+    if (b < 1024) return b + ' B';
+    if (b < 1024 * 1024) return (b / 1024).toFixed(1) + ' KB';
+    return (b / 1024 / 1024).toFixed(2) + ' MB';
+  }
+
+  document.getElementById('uploadForm').addEventListener('submit', () => {
+    btn.disabled = true;
+    btn.innerHTML = '⏳ Processing…';
+  });
+
+  function downloadSample() {
+    const csv = `name,age,gender,location,qualification,stream,academic_level,grade,technical_skills,soft_skills,languages,interest,work_style,work_type,relocate,certifications,experience
+Alice Kumar,22,Female,Bangalore,B.Tech,CSE,Student,87.5,"Python, SQL, Machine Learning","Communication, Leadership","English, Hindi",Data Science,Remote,Technical,Yes,AWS Certified,Intern at XYZ
+Bob Sharma,21,Male,Delhi,B.Tech,IT,Student,79.0,"JavaScript, React, Node.js","Teamwork, Problem Solving","English, Hindi",Web Development,Hybrid,Technical,Yes,,
+Charlie Nair,23,Male,Mumbai,M.Tech,ECE,Student,83.5,"Machine Learning, Python, TensorFlow","Analytical, Research","English, Malayalam",AI/ML,Office,Research,No,Google ML Certificate,Part-time TA`;
+
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'sample_batch_upload.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+</script>
+</body>
+</html>

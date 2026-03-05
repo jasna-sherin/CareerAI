@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Career Recommendation — CareerAI</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="page-wrapper">
+  <div class="container">
+
+    <nav class="top-nav">
+      <a href="/" class="nav-brand">🎓 CareerAI</a>
+      <div class="nav-links">
+        <a href="/" class="nav-link">Predict</a>
+        <a href="/compare" class="nav-link">⚖️ Compare</a>
+        <a href="/statistics" class="nav-link">📈 Stats</a>
+        <a href="/history" class="nav-link">📜 History</a>
+        <a href="/feedback" class="nav-link">💬 Feedback</a>
+      </div>
+    </nav>
+
+    {% if demo_mode %}
+    <div class="demo-banner">⚠️ <strong>Demo Mode:</strong> This prediction is simulated — model files not found.</div>
+    {% endif %}
+
+    <div class="page-header animate-fade-up">
+      <span class="eyebrow">Your Result</span>
+      <h1>Career Recommendation</h1>
+    </div>
+
+    <!-- Hero Result -->
+    <div class="result-hero animate-fade-up delay-1">
+      <div class="career-label">🎯 Best Match</div>
+      <h2>{{ career_path }}</h2>
+      <p class="confidence-text">Confidence Score: <strong>{{ confidence }}%</strong></p>
+      <div class="confidence-track">
+        <div class="confidence-fill" id="confBar" style="width: 0%"></div>
+      </div>
+    </div>
+
+    <!-- Top Matches -->
+    <div class="card animate-fade-up delay-2" style="margin-top:20px">
+      <div class="info-title">🏆 Top Career Matches</div>
+      <div class="match-list">
+        {% for career in top_careers %}
+        <div class="match-item">
+          <div class="match-rank">
+            {% if loop.index == 1 %}🥇{% elif loop.index == 2 %}🥈{% else %}🥉{% endif %}
+          </div>
+          <div class="match-name">{{ career.career }}</div>
+          <div class="match-bar-wrap">
+            <div class="match-bar" data-width="{{ career.probability }}"></div>
+          </div>
+          <div class="match-pct">{{ career.probability }}%</div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Profile Summary -->
+    <div class="card animate-fade-up delay-3" style="margin-top:20px">
+      <div class="info-title">📋 Your Profile Summary</div>
+      <div class="info-grid">
+        <div class="info-item">
+          <div class="lbl">Academic Performance</div>
+          <div class="val">{{ student_data.grade }}%</div>
+        </div>
+        <div class="info-item">
+          <div class="lbl">Qualification</div>
+          <div class="val">{{ student_data.qualification }} – {{ student_data.stream }}</div>
+        </div>
+        <div class="info-item">
+          <div class="lbl">Field of Interest</div>
+          <div class="val">{{ student_data.interest }}</div>
+        </div>
+        <div class="info-item">
+          <div class="lbl">Work Preference</div>
+          <div class="val">{{ student_data.work_style }} · {{ student_data.work_type }}</div>
+        </div>
+        {% if student_data.technical_skills %}
+        <div class="info-item" style="grid-column: 1 / -1">
+          <div class="lbl">Technical Skills</div>
+          <div class="val" style="font-size:.9rem; font-weight:500">{{ student_data.technical_skills }}</div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Skills Gap Analysis -->
+    <div class="card animate-fade-up delay-4" style="margin-top:20px">
+      <div class="info-title">🎯 Explore a Different Career Path?</div>
+      <p style="color:var(--muted); font-size:.9rem; margin-bottom:16px">Check what skills you need to break into a specific role.</p>
+      <form action="/skills-gap-analysis" method="POST" style="display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end">
+        <input type="hidden" name="technical_skills" value="{{ student_data.technical_skills or '' }}">
+        <div class="form-group" style="flex:1; min-width:220px">
+          <label>Desired Career</label>
+          <select name="desired_career" class="form-control" required>
+            <option value="">Select a career…</option>
+            {% for career in (all_careers or ['Data Scientist','Software Developer','Web Developer','Mobile Developer','Data Analyst','QA Engineer','Product Manager','ML Engineer','Cloud Engineer','Cybersecurity Analyst','Deep Learning Engineer','Business Analyst','Software Engineer']) %}
+            <option value="{{ career }}" {% if career == career_path %}selected{% endif %}>{{ career }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <button type="submit" class="btn btn--accent">Analyze Skills Gap →</button>
+      </form>
+    </div>
+
+    <!-- Actions -->
+    <div class="btn-group btn-group--center animate-fade-up delay-4" style="margin-top:24px">
+      <a href="/" class="btn btn--primary">🔄 New Prediction</a>
+      <a href="/career-guide/{{ career_path }}" class="btn btn--outline">📖 Career Guide</a>
+      <a href="/feedback" class="btn btn--outline">💬 Rate This Result</a>
+      <button onclick="window.print()" class="btn btn--ghost">🖨 Print</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  window.addEventListener('load', () => {
+    // Confidence bar
+    const bar = document.getElementById('confBar');
+    setTimeout(() => { bar.style.width = '{{ confidence }}%'; }, 150);
+
+    // Match bars
+    document.querySelectorAll('.match-bar').forEach(el => {
+      const w = el.dataset.width;
+      el.style.width = '0%';
+      setTimeout(() => { el.style.width = w + '%'; }, 300);
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feedback Submitted — CareerAI</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <style>
+    .success-card {
+      max-width: 500px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 60px 40px;
+    }
+    .success-icon {
+      font-size: 5rem;
+      margin-bottom: 20px;
+      display: block;
+      animation: bounceIn .7s cubic-bezier(.34,1.56,.64,1) forwards;
+    }
+    .success-card h2 {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      color: var(--primary);
+      margin-bottom: 12px;
+    }
+    .success-card p {
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+  </style>
+</head>
+<body>
+<div class="page-wrapper" style="display:flex; align-items:center; justify-content:center">
+  <div class="card success-card animate-fade-up">
+    <span class="success-icon">✅</span>
+    <h2>Thank You!</h2>
+    <p>Your feedback has been received. We appreciate you taking the time to help us improve the career recommendation system.</p>
+    <div class="btn-group btn-group--center">
+      <a href="/" class="btn btn--primary">🏠 Back to Home</a>
+      <a href="/statistics" class="btn btn--outline">📊 View Stats</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>
