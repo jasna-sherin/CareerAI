@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compare Students — CareerAI</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="page-wrapper">
+  <div class="container--wide">
+
+    <nav class="top-nav">
+      <a href="/" class="nav-brand">🎓 CareerAI</a>
+      <div class="nav-links">
+        <a href="/" class="nav-link">Predict</a>
+        <a href="/compare" class="nav-link active">⚖️ Compare</a>
+        <a href="/batch-predict" class="nav-link">📊 Batch</a>
+        <a href="/statistics" class="nav-link">📈 Stats</a>
+        <a href="/history" class="nav-link">📜 History</a>
+      </div>
+    </nav>
+
+    <div class="page-header animate-fade-up">
+      <span class="eyebrow">Side-by-Side Analysis</span>
+      <h1>Compare Two Profiles</h1>
+      <p>Enter details for two students and compare their career recommendations.</p>
+    </div>
+
+    <!-- Input Grid -->
+    <div class="compare-grid animate-fade-up delay-1">
+      <!-- Student 1 -->
+      <div class="card">
+        <div class="info-title">👨‍🎓 Student 1</div>
+        <div class="form-group" style="margin-bottom:12px">
+          <label>Age</label>
+          <input type="number" id="age1" class="form-control" value="22" min="16" max="60">
+        </div>
+        <div class="form-group" style="margin-bottom:12px">
+          <label>Gender</label>
+          <select id="gender1" class="form-control">
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin-bottom:12px">
+          <label>Location</label>
+          <input type="text" id="location1" class="form-control" value="Delhi">
+        </div>
+        <div class="form-group" style="margin-bottom:12px">
+          <label>Qualification</label>
+          <select id="qualification1" class="form-control">
+            <option value="B.Tech">B.Tech</option>
+            <option value="M.Tech">M.Tech</option>
+            <option value="BCA">BCA</option>
+            <option value="MCA">MCA</option>
+            <option value="B.Sc">B.Sc</option>
+            <option value="MBA">MBA</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin-bottom:12px">
+          <label>Stream</label>
+          <input type="text" id="stream1" class="form-control" value="CSE">
+        </div>
+        <div class="form-group" style="margin-bottom:12px">
+          <label>Grade (%)</label>
+          <input type="number" id="grade1" class="form-control" value="85" min="0" max="100" step="0.1">
+        </div>
+        <div class="form-group" style="margin-bottom:12px">
+          <label>Field of Interest</label>
+          <select id="interest1" class="form-control">
+            <option value="Data Science">Data Science</option>
+            <option value="AI/ML">AI / ML</option>
+            <option value="Software Development">Software Development</option>
+            <option value="Web Development">Web Development</option>
+            <option value="Mobile Development">Mobile Development</option>
+            <option value="Cloud Computing">Cloud Computing</option>
+            <option value="Cybersecurity">Cybersecurity</option>
+            <option value="Testing">Testing / QA</option>
+            <option value="Management">Management</option>
+            <option value="Research">Research</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin-bottom:12px">
+          <label>Technical Skills</label>
+          <input type="text" id="tech1" class="form-control" placeholder="Python, Java, SQL" value="Python, Java, SQL">
+        </div>
+        <div class="form-group" style="margin-bottom:12px">
+          <label>Work Style</label>
+          <select id="work_style1" class="form-control">
+            <option value="Remote">Remote</option>
+            <option value="Office">Office</option>
+            <option value="Hybrid">Hybrid</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Work Type</label>
+          <select id="work_type1" class="form-control">
+            <option value="Technical">Technical</option>
+            <option value="Managerial">Managerial</option>
+            <option value="Analytical">Analytical</option>
+            <option value="Research">Research</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- VS -->
+      <div class="vs-divider">VS</div>
+
+      <!-- Student 2 -->
+      <div class="card">
+        <div class="info-title">👩‍🎓 Student 2</div>
+        <div class="form-group" style="margin-bottom:12px">
+          <label>Age</label>
+          <input type="number" id="age2" class="form-control" value="21" min="16" max="60">
+        </div>
+        <div class="form-group" style="margin-bottom:12px">
+          <label>Gender</label>
+          <select id="gender2" class="form-control">
+            <option value="Male">Male</option>
+            <option value="Female" selected>Female</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin-bottom:12px">
+          <label>Location</label>
+          <input type="text" id="location2" class="form-control" value="Mumbai">
+        </div>
+        <div class="form-group" style="margin-bottom:12px">
+          <label>Qualification</label>
+          <select id="qualification2" class="form-control">
+            <option value="B.Tech" selected>B.Tech</option>
+            <option value="M.Tech">M.Tech</option>
+            <option value="BCA">BCA</option>
+            <option value="MCA">MCA</option>
+            <option value="B.Sc">B.Sc</option>
+            <option value="MBA">MBA</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin-bottom:12px">
+          <label>Stream</label>
+          <input type="text" id="stream2" class="form-control" value="IT">
+        </div>
+        <div class="form-group" style="margin-bottom:12px">
+          <label>Grade (%)</label>
+          <input type="number" id="grade2" class="form-control" value="78" min="0" max="100" step="0.1">
+        </div>
+        <div class="form-group" style="margin-bottom:12px">
+          <label>Field of Interest</label>
+          <select id="interest2" class="form-control">
+            <option value="Data Science">Data Science</option>
+            <option value="AI/ML">AI / ML</option>
+            <option value="Software Development">Software Development</option>
+            <option value="Web Development" selected>Web Development</option>
+            <option value="Mobile Development">Mobile Development</option>
+            <option value="Cloud Computing">Cloud Computing</option>
+            <option value="Cybersecurity">Cybersecurity</option>
+            <option value="Testing">Testing / QA</option>
+            <option value="Management">Management</option>
+            <option value="Research">Research</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin-bottom:12px">
+          <label>Technical Skills</label>
+          <input type="text" id="tech2" class="form-control" placeholder="JavaScript, React" value="JavaScript, React">
+        </div>
+        <div class="form-group" style="margin-bottom:12px">
+          <label>Work Style</label>
+          <select id="work_style2" class="form-control">
+            <option value="Remote">Remote</option>
+            <option value="Office">Office</option>
+            <option value="Hybrid" selected>Hybrid</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Work Type</label>
+          <select id="work_type2" class="form-control">
+            <option value="Technical" selected>Technical</option>
+            <option value="Managerial">Managerial</option>
+            <option value="Analytical">Analytical</option>
+            <option value="Research">Research</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center; margin:20px 0">
+      <button class="btn btn--primary btn--lg" id="compareBtn" onclick="compareStudents()">
+        ⚡ Compare Now
+      </button>
+    </div>
+
+    <!-- Results -->
+    <div id="resultsSection" style="display:none">
+      <div class="card" style="margin-top:8px">
+        <div class="info-title" style="text-align:center; justify-content:center; margin-bottom:24px">📊 Comparison Results</div>
+        <div class="compare-result-grid">
+          <div class="compare-result-card" id="resultCard1">
+            <div style="font-size:.8rem; color:var(--muted); font-weight:600; text-transform:uppercase; letter-spacing:.08em; margin-bottom:8px">👨‍🎓 Student 1</div>
+            <div class="career-name" id="career1">—</div>
+            <div class="conf" id="confidence1">—</div>
+            <div id="topList1" style="margin-top:14px; font-size:.85rem; color:var(--muted)"></div>
+          </div>
+          <div style="display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-size:1.5rem; font-weight:800; color:var(--muted)">VS</div>
+          <div class="compare-result-card" id="resultCard2">
+            <div style="font-size:.8rem; color:var(--muted); font-weight:600; text-transform:uppercase; letter-spacing:.08em; margin-bottom:8px">👩‍🎓 Student 2</div>
+            <div class="career-name" id="career2">—</div>
+            <div class="conf" id="confidence2">—</div>
+            <div id="topList2" style="margin-top:14px; font-size:.85rem; color:var(--muted)"></div>
+          </div>
+        </div>
+        <div class="btn-group btn-group--center" style="margin-top:24px">
+          <a href="/compare" class="btn btn--outline">🔄 New Comparison</a>
+          <a href="/" class="btn btn--ghost">🏠 Home</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  async function compareStudents() {
+    const btn = document.getElementById('compareBtn');
+    btn.disabled = true;
+    btn.innerHTML = '⏳ Comparing…';
+
+    const student1 = {
+      age: document.getElementById('age1').value,
+      gender: document.getElementById('gender1').value,
+      location: document.getElementById('location1').value,
+      qualification: document.getElementById('qualification1').value,
+      stream: document.getElementById('stream1').value,
+      grade: document.getElementById('grade1').value,
+      interest: document.getElementById('interest1').value,
+      technical_skills: document.getElementById('tech1').value,
+      soft_skills: 'Communication',
+      languages: 'English',
+      academic_level: 'Student',
+      work_style: document.getElementById('work_style1').value,
+      work_type: document.getElementById('work_type1').value,
+      relocate: 'Yes'
+    };
+    const student2 = {
+      age: document.getElementById('age2').value,
+      gender: document.getElementById('gender2').value,
+      location: document.getElementById('location2').value,
+      qualification: document.getElementById('qualification2').value,
+      stream: document.getElementById('stream2').value,
+      grade: document.getElementById('grade2').value,
+      interest: document.getElementById('interest2').value,
+      technical_skills: document.getElementById('tech2').value,
+      soft_skills: 'Teamwork',
+      languages: 'English',
+      academic_level: 'Student',
+      work_style: document.getElementById('work_style2').value,
+      work_type: document.getElementById('work_type2').value,
+      relocate: 'Yes'
+    };
+
+    try {
+      const res = await fetch('/api/compare', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ student1, student2 })
+      });
+      const data = await res.json();
+      if (data.success) {
+        document.getElementById('career1').textContent = data.student1.career;
+        document.getElementById('confidence1').textContent = data.student1.confidence + '% confidence';
+        document.getElementById('career2').textContent = data.student2.career;
+        document.getElementById('confidence2').textContent = data.student2.confidence + '% confidence';
+
+        const renderTop = (tops, elId) => {
+          const el = document.getElementById(elId);
+          el.innerHTML = tops.slice(1).map(t => `<div style="padding:2px 0">${t.career}: ${t.probability}%</div>`).join('');
+        };
+        if (data.student1.top) renderTop(data.student1.top, 'topList1');
+        if (data.student2.top) renderTop(data.student2.top, 'topList2');
+
+        // Highlight winner
+        const c1 = parseFloat(data.student1.confidence);
+        const c2 = parseFloat(data.student2.confidence);
+        if (c1 > c2) document.getElementById('resultCard1').classList.add('winner');
+        else if (c2 > c1) document.getElementById('resultCard2').classList.add('winner');
+
+        document.getElementById('resultsSection').style.display = 'block';
+        document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
+      } else {
+        alert('Error: ' + (data.error || 'Unknown error'));
+      }
+    } catch (err) {
+      alert('Network error: ' + err.message);
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = '⚡ Compare Now';
+    }
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Batch Results — CareerAI</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="page-wrapper">
+  <div class="container--wide">
+
+    <nav class="top-nav">
+      <a href="/" class="nav-brand">🎓 CareerAI</a>
+      <div class="nav-links">
+        <a href="/" class="nav-link">Predict</a>
+        <a href="/compare" class="nav-link">⚖️ Compare</a>
+        <a href="/batch-predict" class="nav-link active">📊 Batch</a>
+        <a href="/statistics" class="nav-link">📈 Stats</a>
+      </div>
+    </nav>
+
+    <div class="page-header animate-fade-up">
+      <span class="eyebrow">Batch Complete</span>
+      <h1>Prediction Results</h1>
+    </div>
+
+    <!-- Summary -->
+    <div class="stat-row animate-fade-up delay-1">
+      <div class="stat-card stat-card--accent">
+        <div class="stat-val">{{ results|length }}</div>
+        <div class="stat-lbl">Students Processed</div>
+      </div>
+      <div class="stat-card stat-card--success">
+        <div class="stat-val">
+          {% if results %}{{ (results | map(attribute='confidence') | sum / results|length) | round(1) }}%{% else %}—{% endif %}
+        </div>
+        <div class="stat-lbl">Avg Confidence</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">
+          {%- set ns = namespace(seen=[]) -%}
+          {%- for r in results -%}
+            {%- if r.predicted_career not in ns.seen -%}
+              {%- set ns.seen = ns.seen + [r.predicted_career] -%}
+            {%- endif -%}
+          {%- endfor -%}
+          {{ ns.seen | length }}
+        </div>
+        <div class="stat-lbl">Unique Career Paths</div>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="card card--flush animate-fade-up delay-2" style="margin-top:0">
+      <div style="overflow-x:auto">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Student</th>
+              <th>Predicted Career</th>
+              <th>Runner-up</th>
+              <th>Confidence</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for r in results %}
+            <tr>
+              <td style="color:var(--muted); font-size:.85rem">{{ r.student_id }}</td>
+              <td><strong>{{ r.name }}</strong></td>
+              <td>
+                <span class="badge badge--accent">{{ r.predicted_career }}</span>
+              </td>
+              <td style="color:var(--muted); font-size:.875rem">
+                {% if r.top_careers and r.top_careers|length > 1 %}
+                  {{ r.top_careers[1].career }}
+                {% endif %}
+              </td>
+              <td>
+                <span class="badge {% if r.confidence >= 40 %}badge--success{% elif r.confidence >= 25 %}badge--warning{% else %}badge--danger{% endif %}">
+                  {{ r.confidence }}%
+                </span>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="btn-group btn-group--center animate-fade-up delay-3" style="margin-top:20px">
+      <a href="/batch-predict" class="btn btn--primary">📤 Upload Another File</a>
+      <button onclick="exportCSV()" class="btn btn--outline">⬇️ Export Results CSV</button>
+      <a href="/" class="btn btn--ghost">🏠 Home</a>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  function exportCSV() {
+    const results = {{ results | tojson }};
+    let csv = 'Student ID,Name,Predicted Career,Confidence (%),Runner-Up\n';
+    results.forEach(r => {
+      const runnerUp = (r.top_careers && r.top_careers.length > 1) ? r.top_careers[1].career : '';
+      csv += `${r.student_id},"${r.name}","${r.predicted_career}",${r.confidence},"${runnerUp}"\n`;
+    });
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'career_predictions.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feedback — CareerAI</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="page-wrapper">
+  <div class="container--narrow">
+
+    <nav class="top-nav">
+      <a href="/" class="nav-brand">🎓 CareerAI</a>
+      <div class="nav-links">
+        <a href="/" class="nav-link">Predict</a>
+        <a href="/statistics" class="nav-link">📈 Stats</a>
+        <a href="/history" class="nav-link">📜 History</a>
+        <a href="/feedback" class="nav-link active">💬 Feedback</a>
+      </div>
+    </nav>
+
+    <div class="page-header animate-fade-up">
+      <span class="eyebrow">Help Us Improve</span>
+      <h1>Share Your Feedback</h1>
+      <p>Your input helps us improve the accuracy and relevance of career recommendations.</p>
+    </div>
+
+    <div class="card animate-fade-up delay-1">
+      <form action="/feedback" method="POST">
+
+        <!-- Star Rating -->
+        <div class="form-section">
+          <div class="section-label">⭐ Overall Rating</div>
+          <div class="star-rating" id="starRating">
+            <input type="radio" name="rating" value="5" id="s5" required>
+            <label for="s5" title="5 stars">★</label>
+            <input type="radio" name="rating" value="4" id="s4">
+            <label for="s4" title="4 stars">★</label>
+            <input type="radio" name="rating" value="3" id="s3">
+            <label for="s3" title="3 stars">★</label>
+            <input type="radio" name="rating" value="2" id="s2">
+            <label for="s2" title="2 stars">★</label>
+            <input type="radio" name="rating" value="1" id="s1">
+            <label for="s1" title="1 star">★</label>
+          </div>
+          <div id="ratingLabel" style="margin-top:8px; font-size:.875rem; color:var(--muted); height:20px"></div>
+        </div>
+
+        <hr class="divider">
+
+        <!-- Accuracy -->
+        <div class="form-section">
+          <div class="section-label">🎯 Prediction Accuracy</div>
+          <div class="form-group">
+            <label for="accurate">How accurate was the prediction?</label>
+            <select id="accurate" name="accurate" class="form-control" required>
+              <option value="">Select an option…</option>
+              <option value="Yes">✅ Yes, very accurate</option>
+              <option value="Somewhat">🟡 Somewhat accurate</option>
+              <option value="No">❌ Not accurate</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-top:14px">
+            <label for="suggested_career">If different, what career did you expect?</label>
+            <input type="text" id="suggested_career" name="suggested_career" class="form-control" placeholder="e.g. Data Scientist, Product Manager…">
+          </div>
+        </div>
+
+        <hr class="divider">
+
+        <!-- Comments -->
+        <div class="form-section">
+          <div class="section-label">💭 Additional Comments</div>
+          <div class="form-group">
+            <label for="comments">Tell us more (optional)</label>
+            <textarea id="comments" name="comments" class="form-control" placeholder="Share your thoughts, suggestions, or any specific concerns about the recommendation…" style="min-height:110px"></textarea>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn--primary btn--lg btn--full">
+          ✅ Submit Feedback
+        </button>
+      </form>
+    </div>
+
+    <div class="btn-group btn-group--center" style="margin-top:16px">
+      <a href="/" class="btn btn--ghost">← Back to Home</a>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const labels = ['', 'Not helpful at all', 'Below expectations', 'Average', 'Good experience', 'Excellent — very accurate!'];
+  const inputs = document.querySelectorAll('.star-rating input');
+  inputs.forEach(input => {
+    input.addEventListener('change', () => {
+      document.getElementById('ratingLabel').textContent = labels[input.value] || '';
+    });
+  });
+</script>
+</body>
+</html>

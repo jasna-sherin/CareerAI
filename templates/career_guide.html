@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ career_name }} — Career Guide — CareerAI</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="page-wrapper">
+  <div class="container">
+
+    <nav class="top-nav">
+      <a href="/" class="nav-brand">🎓 CareerAI</a>
+      <div class="nav-links">
+        <a href="/" class="nav-link">Predict</a>
+        <a href="/statistics" class="nav-link">📈 Stats</a>
+        <a href="/history" class="nav-link">📜 History</a>
+        <a href="/feedback" class="nav-link">💬 Feedback</a>
+      </div>
+    </nav>
+
+    <!-- Header -->
+    <div class="page-header animate-fade-up">
+      <span class="eyebrow">Career Guide</span>
+      <h1>{{ career_info.icon or '🎯' }} {{ career_name }}</h1>
+      <p>{{ career_info.description }}</p>
+    </div>
+
+    <!-- Key Stats -->
+    <div class="stat-row animate-fade-up delay-1">
+      <div class="stat-card">
+        <div class="stat-val" style="font-size:1.1rem; line-height:1.4">{{ career_info.avg_salary }}</div>
+        <div class="stat-lbl">💰 Average Salary Range</div>
+      </div>
+      <div class="stat-card stat-card--accent">
+        <div class="stat-val" style="font-size:1.05rem; line-height:1.4">{{ career_info.growth_rate }}</div>
+        <div class="stat-lbl">📈 Job Market Growth</div>
+      </div>
+    </div>
+
+    <!-- Education -->
+    <div class="card animate-fade-up delay-2" style="margin-top:0">
+      <div class="info-title">🎓 Education Requirements</div>
+      <div class="alert alert--info" style="margin-bottom:0">
+        <span>📚</span>
+        <div>{{ career_info.education }}</div>
+      </div>
+    </div>
+
+    <!-- Skills Required -->
+    <div class="card animate-fade-up delay-2" style="margin-top:16px">
+      <div class="info-title">🎯 Required Skills</div>
+      <div class="skill-grid">
+        {% for skill in career_info.skills_required %}
+        <span class="skill-tag skill-tag--yours">{{ skill }}</span>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Top Companies -->
+    <div class="card animate-fade-up delay-3" style="margin-top:16px">
+      <div class="info-title">🏢 Top Hiring Companies</div>
+      <div class="company-grid">
+        {% for company in career_info.companies %}
+        <div class="company-chip">{{ company }}</div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Related Careers -->
+    {% if career_info.related_careers %}
+    <div class="card animate-fade-up delay-3" style="margin-top:16px">
+      <div class="info-title">🔗 Related Career Paths</div>
+      <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:6px">
+        {% for related in career_info.related_careers %}
+        <a href="/career-guide/{{ related }}" class="btn btn--outline btn--sm">{{ related }} →</a>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- All Careers -->
+    {% if all_careers %}
+    <div class="card animate-fade-up delay-4" style="margin-top:16px">
+      <div class="info-title">🗂 Browse Other Careers</div>
+      <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:6px">
+        {% for career in all_careers %}
+        {% if career != career_name %}
+        <a href="/career-guide/{{ career }}" class="btn btn--ghost btn--sm">{{ career }}</a>
+        {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="btn-group btn-group--center animate-fade-up" style="margin-top:24px">
+      <a href="/" class="btn btn--primary">🔍 Get My Recommendation</a>
+      <a href="/statistics" class="btn btn--outline">📊 View Statistics</a>
+      <a href="javascript:history.back()" class="btn btn--ghost">← Back</a>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

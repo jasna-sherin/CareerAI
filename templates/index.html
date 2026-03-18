@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CareerAI — Career Path Recommendation</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="page-wrapper">
+  <div class="container">
+
+    <!-- Nav -->
+    <nav class="top-nav">
+      <a href="/" class="nav-brand">🎓 CareerAI</a>
+      <div class="nav-links">
+        <a href="/" class="nav-link active">Predict</a>
+        <a href="/compare" class="nav-link">⚖️ Compare</a>
+        <a href="/batch-predict" class="nav-link">📊 Batch</a>
+        <a href="/statistics" class="nav-link">📈 Stats</a>
+        <a href="/history" class="nav-link">📜 History</a>
+        <a href="/feedback" class="nav-link">💬 Feedback</a>
+      </div>
+    </nav>
+
+    {% if demo_mode %}
+    <div class="demo-banner">
+      ⚠️ <strong>Demo Mode:</strong> Model files not found. Predictions are simulated for demonstration purposes.
+    </div>
+    {% endif %}
+
+    <!-- Header -->
+    <div class="page-header animate-fade-up">
+      <span class="eyebrow">AI-Powered Guidance</span>
+      <h1>Find Your Ideal Career Path</h1>
+      <p>Answer a few questions and our system will match you with the careers best suited to your profile.</p>
+    </div>
+
+    <!-- Form Card -->
+    <div class="card animate-fade-up delay-1">
+      <form action="/predict" method="POST" id="predictForm">
+
+        <!-- Personal Information -->
+        <div class="form-section">
+          <div class="section-label">👤 Personal Information</div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="age">Age <span style="color:var(--danger)">*</span></label>
+              <input type="number" id="age" name="age" class="form-control" min="16" max="60" value="21" required>
+            </div>
+            <div class="form-group">
+              <label for="gender">Gender <span style="color:var(--danger)">*</span></label>
+              <select id="gender" name="gender" class="form-control" required>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other / Prefer not to say</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="location">City / Location <span style="color:var(--danger)">*</span></label>
+              <input type="text" id="location" name="location" class="form-control" placeholder="e.g. Hyderabad" required>
+            </div>
+            <div class="form-group">
+              <label for="relocate">Willing to Relocate? <span style="color:var(--danger)">*</span></label>
+              <select id="relocate" name="relocate" class="form-control" required>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+                <option value="Maybe">Maybe</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Academic Background -->
+        <div class="form-section">
+          <div class="section-label">🎓 Academic Background</div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="qualification">Highest Qualification <span style="color:var(--danger)">*</span></label>
+              <select id="qualification" name="qualification" class="form-control" required>
+                <option value="B.Tech">B.Tech</option>
+                <option value="B.Sc">B.Sc</option>
+                <option value="BCA">BCA</option>
+                <option value="M.Tech">M.Tech</option>
+                <option value="M.Sc">M.Sc</option>
+                <option value="MCA">MCA</option>
+                <option value="MBA">MBA</option>
+                <option value="12th">12th Pass</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="stream">Stream / Specialization <span style="color:var(--danger)">*</span></label>
+              <input type="text" id="stream" name="stream" class="form-control" placeholder="e.g. CSE, ECE, IT" required>
+            </div>
+            <div class="form-group">
+              <label for="academic_level">Current Level <span style="color:var(--danger)">*</span></label>
+              <select id="academic_level" name="academic_level" class="form-control" required>
+                <option value="Student">Student (Currently enrolled)</option>
+                <option value="Graduate">Graduate</option>
+                <option value="Postgraduate">Postgraduate</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="grade">Grade / CGPA / Percentage <span style="color:var(--danger)">*</span></label>
+              <input type="number" id="grade" name="grade" class="form-control" min="0" max="100" step="0.01" placeholder="e.g. 85.5" required>
+              <span class="hint">Enter as percentage (0 – 100)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Skills & Interests -->
+        <div class="form-section">
+          <div class="section-label">💡 Skills & Interests</div>
+          <div class="form-grid">
+            <div class="form-group span-2">
+              <label for="technical_skills">Technical Skills</label>
+              <textarea id="technical_skills" name="technical_skills" class="form-control" placeholder="e.g. Python, JavaScript, SQL, Machine Learning, React (comma-separated)"></textarea>
+              <span class="hint">Separate multiple skills with commas</span>
+            </div>
+            <div class="form-group span-2">
+              <label for="soft_skills">Soft Skills</label>
+              <textarea id="soft_skills" name="soft_skills" class="form-control" placeholder="e.g. Leadership, Communication, Teamwork, Problem Solving"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="languages">Languages Known</label>
+              <input type="text" id="languages" name="languages" class="form-control" placeholder="e.g. English, Hindi, Telugu">
+            </div>
+            <div class="form-group">
+              <label for="interest">Primary Field of Interest <span style="color:var(--danger)">*</span></label>
+              <select id="interest" name="interest" class="form-control" required>
+                <option value="Data Science">Data Science</option>
+                <option value="Software Development">Software Development</option>
+                <option value="Web Development">Web Development</option>
+                <option value="Mobile Development">Mobile Development</option>
+                <option value="AI/ML">AI / Machine Learning</option>
+                <option value="Cloud Computing">Cloud Computing</option>
+                <option value="Cybersecurity">Cybersecurity</option>
+                <option value="Testing">Testing / QA</option>
+                <option value="Management">Management</option>
+                <option value="Research">Research</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Work Preferences -->
+        <div class="form-section">
+          <div class="section-label">🏢 Work Preferences</div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="work_style">Preferred Work Style <span style="color:var(--danger)">*</span></label>
+              <select id="work_style" name="work_style" class="form-control" required>
+                <option value="Remote">Remote</option>
+                <option value="Office">Office (On-site)</option>
+                <option value="Hybrid">Hybrid</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="work_type">Work Type Interest <span style="color:var(--danger)">*</span></label>
+              <select id="work_type" name="work_type" class="form-control" required>
+                <option value="Technical">Technical</option>
+                <option value="Managerial">Managerial</option>
+                <option value="Creative">Creative</option>
+                <option value="Analytical">Analytical</option>
+                <option value="Research">Research</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Experience -->
+        <div class="form-section">
+          <div class="section-label">🏆 Experience & Achievements</div>
+          <div class="form-grid">
+            <div class="form-group span-2">
+              <label for="certifications">Certifications</label>
+              <textarea id="certifications" name="certifications" class="form-control" placeholder="e.g. AWS Certified Cloud Practitioner, Google Analytics, Coursera ML Course"></textarea>
+            </div>
+            <div class="form-group span-2">
+              <label for="experience">Past Jobs / Internships</label>
+              <textarea id="experience" name="experience" class="form-control" placeholder="e.g. Software Intern at XYZ Corp (Jun–Aug 2024), Freelance Web Developer"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn--primary btn--lg btn--full" id="submitBtn">
+          🔍 Get My Career Recommendation
+        </button>
+      </form>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const form = document.getElementById('predictForm');
+  const btn = document.getElementById('submitBtn');
+  form.addEventListener('submit', () => {
+    btn.disabled = true;
+    btn.innerHTML = '<span style="animation:pulse 1s infinite">⏳</span> Analyzing your profile…';
+  });
+</script>
+</body>
+</html>
